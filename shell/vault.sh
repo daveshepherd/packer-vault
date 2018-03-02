@@ -9,7 +9,7 @@ do
   sleep 5
 done
 
-curl -o /tmp/vault.zip https://releases.hashicorp.com/vault/0.8.3/vault_0.8.3_linux_amd64.zip
+curl -o /tmp/vault.zip https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
 
 unzip -d /tmp /tmp/vault.zip
 

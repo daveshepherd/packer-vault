@@ -1,29 +1,57 @@
 {
   "variables": {
-    "aws_access_key": "",
-    "aws_secret_key": ""
+    "ireland_vpc_id": "",
+    "ireland_subnet_id": "",
+    "london_vpc_id": "",
+    "london_subnet_id": "",
+    "vault_version": ""
   },
-  "builders": [{
-    "type": "amazon-ebs",
-    "access_key": "{{user `aws_access_key`}}",
-    "secret_key": "{{user `aws_secret_key`}}",
-    "region": "eu-west-1",
-    "subnet_id": "subnet-2491f643",
-    "vpc_id": "vpc-1902cd7e",
-    "associate_public_ip_address": true,
-    "source_ami_filter": {
-      "filters": {
-        "virtualization-type": "hvm",
-        "name": "consul-client-*",
-        "root-device-type": "ebs"
+  "builders": [
+    {
+      "name": "aws-ireland",
+      "type": "amazon-ebs",
+      "region": "eu-west-1",
+      "vpc_id": "{{user `ireland_vpc_id`}}",
+      "subnet_id": "{{user `ireland_subnet_id`}}",
+      "associate_public_ip_address": true,
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "consul-*",
+          "root-device-type": "ebs"
+        },
+        "owners": [
+          "238573916854"
+        ],
+        "most_recent": true
       },
-      "owners": ["238573916854"],
-      "most_recent": true
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ami_name": "vault-{{user `vault_version`}}-{{timestamp}}"
     },
-    "instance_type": "t2.micro",
-    "ssh_username": "ubuntu",
-    "ami_name": "vault-{{timestamp}}"
-  }],
+    {
+      "name": "aws-london",
+      "type": "amazon-ebs",
+      "region": "eu-west-2",
+      "vpc_id": "{{user `london_vpc_id`}}",
+      "subnet_id": "{{user `london_subnet_id`}}",
+      "associate_public_ip_address": true,
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "consul-*",
+          "root-device-type": "ebs"
+        },
+        "owners": [
+          "238573916854"
+        ],
+        "most_recent": true
+      },
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ami_name": "vault-{{user `vault_version`}}-{{timestamp}}"
+    }
+  ],
   "provisioners": [
     {
       "type": "file",
@@ -37,7 +65,10 @@
     },
     {
       "type": "shell",
-      "script": "shell/vault.sh"
+      "script": "shell/vault.sh",
+      "environment_vars": [
+        "VAULT_VERSION={{user `vault_version`}}"
+      ]
     }
   ]
 }
