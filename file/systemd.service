@@ -1,7 +1,7 @@
 [Unit]
 Description=vault
 Requires=network-online.target
-After=network-online.target consul-agent.service
+After=network-online.target vault-agent.service
 
 [Service]
 ExecStart=/usr/local/bin/vault server -config /etc/vault.d
