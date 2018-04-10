@@ -1,18 +1,18 @@
 {
   "variables": {
-    "ireland_vpc_id": "",
-    "ireland_subnet_id": "",
-    "london_vpc_id": "",
-    "london_subnet_id": "",
-    "vault_version": ""
+    "region": "",
+    "vpc_id": "",
+    "subnet_id": "",
+    "destination_regions": "",
+    "consul_version": ""
   },
   "builders": [
     {
-      "name": "aws-ireland",
+      "name": "aws",
       "type": "amazon-ebs",
-      "region": "eu-west-1",
-      "vpc_id": "{{user `ireland_vpc_id`}}",
-      "subnet_id": "{{user `ireland_subnet_id`}}",
+      "region": "{{user `region`}}",
+      "vpc_id": "{{user `vpc_id`}}",
+      "subnet_id": "{{user `subnet_id`}}",
       "associate_public_ip_address": true,
       "source_ami_filter": {
         "filters": {
@@ -28,30 +28,7 @@
       "spot_price": "auto",
       "spot_price_auto_product": "Linux/UNIX (Amazon VPC)",
       "instance_type": "t2.micro",
-      "ssh_username": "ubuntu",
-      "ami_name": "vault-{{user `vault_version`}}-{{timestamp}}"
-    },
-    {
-      "name": "aws-london",
-      "type": "amazon-ebs",
-      "region": "eu-west-2",
-      "vpc_id": "{{user `london_vpc_id`}}",
-      "subnet_id": "{{user `london_subnet_id`}}",
-      "associate_public_ip_address": true,
-      "source_ami_filter": {
-        "filters": {
-          "virtualization-type": "hvm",
-          "name": "consul-*",
-          "root-device-type": "ebs"
-        },
-        "owners": [
-          "238573916854"
-        ],
-        "most_recent": true
-      },
-      "spot_price": "auto",
-      "spot_price_auto_product": "Linux/UNIX (Amazon VPC)",
-      "instance_type": "t2.micro",
+      "ami_regions": "{{user `destination_regions`}}",
       "ssh_username": "ubuntu",
       "ami_name": "vault-{{user `vault_version`}}-{{timestamp}}"
     }

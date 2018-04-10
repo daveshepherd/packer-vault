@@ -5,4 +5,4 @@ PACKER=$(which packer)
 
 VAULT_VERSION=0.9.6
 
-${PACKER} build -var "london_vpc_id=${LONDON_VPC}" -var "london_subnet_id=${LONDON_SUBNET}" -var "ireland_vpc_id=${IRELAND_VPC}" -var "ireland_subnet_id=${IRELAND_SUBNET}" -var "vault_version=${VAULT_VERSION}" vault.json
+${PACKER} build -var "region=${REGION}" -var "vpc_id=${VPC_ID}" -var "subnet_id=${SUBNET_ID}" -var "vault_version=${VAULT_VERSION}" -var "destination_regions=${DESTINATION_REGIONS}" build.json
